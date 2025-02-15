@@ -34,7 +34,7 @@ def get_output_information(filenames_list, text_widget):
             text_widget.insert(END, f"{filename}\n{decoded_json_str}\n\n")
             text_widget.see(END)
             idx += 1
-    save_output_to_json(decoded_outputs_list)
+    ask_save_output(decoded_outputs_list)
 
 def save_output_to_json(decoded_outputs_list):
     try:
@@ -44,13 +44,18 @@ def save_output_to_json(decoded_outputs_list):
     except Exception as e:
         print(f"An error occurred while saving the JSON file: {e}")
 
+def ask_save_output(decoded_outputs_list):
+    response = messagebox.askyesno("Save Output", "Do you want to create a .json file with the output?")
+    if response:
+        save_output_to_json(decoded_outputs_list)
+        messagebox.showinfo("Success", "Decoded JSON list has been successfully saved to 'license_data.json'")
+
 def select_files():
     licenses_path = filedialog.askdirectory(title="Select Directory Containing JWS Files")
     if licenses_path:
         path_var.set(licenses_path)
         full_filenames_list = get_filenames_list(Path(licenses_path))
         get_output_information(full_filenames_list, text_widget)
-        messagebox.showinfo("Success", "Decoded JSON list has been successfully saved to 'license_data.json'")
 
 def open_search_dialog():
     search_window = Toplevel(root)
@@ -93,7 +98,7 @@ Button(root, text="Browse...", command=select_files).pack(pady=(10, 5))
 
 # Add image to the main window
 # Note: Replace 'your_image.png' with the path to the image you saved
-# photo = PhotoImage(file="graphics/mitsubishi.png")
+# photo = PhotoImage(file="your_image.png")
 # image_label = Label(root, image=photo)
 # image_label.place(relx=1.0, y=10, anchor="ne")
 
