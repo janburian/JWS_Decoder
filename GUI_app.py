@@ -2,7 +2,7 @@ import json
 import os
 import jwt
 from pathlib import Path
-from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT
+from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry
 
 def get_filenames_list(licenses_path):
     filenames_list = []
@@ -52,13 +52,40 @@ def select_files():
         get_output_information(full_filenames_list, text_widget)
         messagebox.showinfo("Success", "Decoded JSON list has been successfully saved to 'license_data.json'")
 
+def open_search_dialog():
+    search_window = Toplevel(root)
+    search_window.title("Search")
+    search_window.geometry("300x50")
+    Label(search_window, text="Find:").pack(side=LEFT, padx=10)
+    search_entry = Entry(search_window, width=20)
+    search_entry.pack(side=LEFT, padx=10)
+
+    def search_text():
+        text_widget.tag_remove("match", "1.0", END)
+        search_term = search_entry.get()
+        if search_term:
+            idx = "1.0"
+            while True:
+                idx = text_widget.search(search_term, idx, nocase=1, stopindex=END)
+                if not idx:
+                    break
+                lastidx = f"{idx}+{len(search_term)}c"
+                text_widget.tag_add("match", idx, lastidx)
+                idx = lastidx
+            text_widget.tag_config("match", background="yellow")
+
+    search_entry.bind('<Return>', lambda event: search_text())
+    Button(search_window, text="Find", command=search_text).pack(side=LEFT, padx=10)
+
 # Create the main window
 root = Tk()
 root.title("JWS File Decoder")
 root.geometry("1000x500")
 
+# Bind Ctrl+F to open the search dialog
+root.bind('<Control-f>', lambda event: open_search_dialog())
+
 # GUI Widgets
-#Label(root, text="Tool for decoding JWS files.").pack(pady=2)
 Label(root, text="Tool for decoding license files in .jws format", font=("Helvetica", 16, "bold")).pack(pady=5)
 path_var = StringVar()
 Label(root, textvariable=path_var).pack(pady=5)
