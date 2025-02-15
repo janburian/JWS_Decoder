@@ -2,7 +2,7 @@ import json
 import os
 import jwt
 from pathlib import Path
-from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry
+from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage
 
 def get_filenames_list(licenses_path):
     filenames_list = []
@@ -90,6 +90,12 @@ Label(root, text="Tool for decoding license files in .jws format", font=("Helvet
 path_var = StringVar()
 Label(root, textvariable=path_var).pack(pady=5)
 Button(root, text="Browse...", command=select_files).pack(pady=(10, 5))
+
+# Add image to the main window
+# Note: Replace 'your_image.png' with the path to the image you saved
+# photo = PhotoImage(file="graphics/mitsubishi.png")
+# image_label = Label(root, image=photo)
+# image_label.place(relx=1.0, y=10, anchor="ne")
 
 # Frame to hold the Text widget and Scrollbar
 Label(root, text="Output:", font=("Helvetica", 12, "bold")).pack(pady=5, anchor='w')
