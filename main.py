@@ -55,11 +55,8 @@ def save_output_to_json(decoded_outputs_list):
 
 if __name__ == "__main__":
     while True:
-        print("Please, insert path to JWS files or press E to exit: ")
-        if keyboard.read_key() != "e":
-            licenses_path = input()
-            full_filenames_list = get_filenames_list(Path(licenses_path))
-            print()
-            get_output_information(full_filenames_list)
-        else:
-            break
+        print("Please, insert path to JWS files: ")
+        licenses_path = input()
+        full_filenames_list = get_filenames_list(Path(licenses_path))
+        print()
+        get_output_information(full_filenames_list)
