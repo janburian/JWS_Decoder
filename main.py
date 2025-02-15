@@ -53,8 +53,9 @@ def save_output_to_json(decoded_outputs_list):
 
 
 if __name__ == "__main__":
-    print("Please, insert path to JWS files: ")
-    licenses_path = input()
-    full_filenames_list = get_filenames_list(Path(licenses_path))
-    print()
-    get_output_information(full_filenames_list)
+    while True:
+        print("Please, insert path to JWS files: ")
+        licenses_path = input()
+        full_filenames_list = get_filenames_list(Path(licenses_path))
+        print()
+        get_output_information(full_filenames_list)
