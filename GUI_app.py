@@ -4,6 +4,7 @@ import jwt
 from pathlib import Path
 from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage
 
+
 def get_filenames_list(licenses_path):
     filenames_list = []
     print("FILENAMES FOUND: ")
@@ -22,6 +23,7 @@ def get_filenames_list(licenses_path):
         print(f"An unexpected error occurred: {e}")
     return filenames_list
 
+
 def get_output_information(filenames_list, text_widget):
     decoded_outputs_list = []
     idx = 0
@@ -36,6 +38,7 @@ def get_output_information(filenames_list, text_widget):
             idx += 1
     ask_save_output(decoded_outputs_list)
 
+
 def save_output_to_json(decoded_outputs_list, file_path):
     try:
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -43,6 +46,7 @@ def save_output_to_json(decoded_outputs_list, file_path):
         print(f"Decoded JSON list has been successfully saved to '{file_path}'")
     except Exception as e:
         print(f"An error occurred while saving the JSON file: {e}")
+
 
 def ask_save_output(decoded_outputs_list):
     response = messagebox.askyesno("Save Output", "Do you want to create a .json file with the output?")
@@ -64,6 +68,7 @@ def ask_save_output(decoded_outputs_list):
             save_output_to_json(decoded_outputs_list, file_path)
             messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
 
+
 def select_files():
     text_widget.delete("1.0", END)  # Clear the text widget
     licenses_path = filedialog.askdirectory(title="Select Directory Containing JWS Files")
@@ -71,6 +76,7 @@ def select_files():
         path_var.set(licenses_path)
         full_filenames_list = get_filenames_list(Path(licenses_path))
         get_output_information(full_filenames_list, text_widget)
+
 
 def open_search_dialog():
     search_window = Toplevel(root)
@@ -96,6 +102,7 @@ def open_search_dialog():
 
     search_entry.bind('<Return>', lambda event: search_text())
     Button(search_window, text="Find", command=search_text).pack(side=LEFT, padx=10)
+
 
 # Create the main window
 root = Tk()
