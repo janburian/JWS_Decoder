@@ -36,21 +36,36 @@ def get_output_information(filenames_list, text_widget):
             idx += 1
     ask_save_output(decoded_outputs_list)
 
-def save_output_to_json(decoded_outputs_list):
+def save_output_to_json(decoded_outputs_list, file_path):
     try:
-        with open('license_data.json', 'w', encoding='utf-8') as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(decoded_outputs_list, f, sort_keys=True, ensure_ascii=False, indent=4)
-        print("Decoded JSON list has been successfully saved to 'license_data.json'")
+        print(f"Decoded JSON list has been successfully saved to '{file_path}'")
     except Exception as e:
         print(f"An error occurred while saving the JSON file: {e}")
 
 def ask_save_output(decoded_outputs_list):
     response = messagebox.askyesno("Save Output", "Do you want to create a .json file with the output?")
     if response:
-        save_output_to_json(decoded_outputs_list)
-        messagebox.showinfo("Success", "Decoded JSON list has been successfully saved to 'license_data.json'")
+        file_path = 'license_data.json'
+        if os.path.exists(file_path):
+            overwrite_response = messagebox.askyesnocancel("Save Output", f"'{file_path}' already exists. Do you want to overwrite it? If you do not want to overwrite it, please create a new .json file in next step.")
+            if overwrite_response is None:
+                return  # User cancelled
+            elif overwrite_response:
+                save_output_to_json(decoded_outputs_list, file_path)
+                messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
+            else:
+                file_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
+                if file_path:
+                    save_output_to_json(decoded_outputs_list, file_path)
+                    messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
+        else:
+            save_output_to_json(decoded_outputs_list, file_path)
+            messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
 
 def select_files():
+    text_widget.delete("1.0", END)  # Clear the text widget
     licenses_path = filedialog.askdirectory(title="Select Directory Containing JWS Files")
     if licenses_path:
         path_var.set(licenses_path)
