@@ -2,7 +2,6 @@ import json
 import os
 import jwt
 from pathlib import Path
-import keyboard
 
 
 def get_filenames_list(licenses_path):
