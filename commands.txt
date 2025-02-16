@@ -1,0 +1,2 @@
+pyinstaller GUI_app.spec
+pyinstaller --onefile --i="./icons/icon_ai.ico" GUI_app.py -w
