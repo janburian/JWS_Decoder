@@ -3,6 +3,7 @@ import os
 import jwt
 from pathlib import Path
 from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage, DISABLED
+import sys
 
 def get_filenames_list(licenses_path):
     filenames_list = []
@@ -127,10 +128,17 @@ def open_search_dialog():
     Button(search_window, text="Find", command=search_text).pack(side=LEFT, padx=10)
 
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 # Create the main window
 root = Tk()
 root.title("JWS File Decoder")
-root.iconbitmap("C:\\Users\\janbu\\GitHub\\JWS_Decoder\\icons\\icon_ai.ico") # Need to use absolute path, otherwise it does not work
 # root.geometry("1000x500")
 
 window_width = 1000
@@ -176,6 +184,10 @@ text_widget.pack(side=LEFT, expand=True, fill=BOTH)
 scrollbar = Scrollbar(text_frame, command=text_widget.yview, width=20)
 scrollbar.pack(side=RIGHT, fill=Y)
 text_widget.configure(yscrollcommand=scrollbar.set)
+
+
+# Setting icon
+root.iconbitmap(default=resource_path("icon_ai.ico"))
 
 # Start the GUI loop
 root.mainloop()

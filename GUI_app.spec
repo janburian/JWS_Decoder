@@ -5,12 +5,12 @@ a = Analysis(
     ['GUI_app.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('icon_ai.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[    "altgraph",
+    excludes=[ "altgraph",
     "asttokens",
     "attrs",
     "backcall",
@@ -79,7 +79,8 @@ a = Analysis(
     "webencodings",
     "wheel",
     "yarg",
-    "zipp"],
+    "zipp"
+],
     noarchive=False,
     optimize=0,
 )
@@ -104,5 +105,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon = "C:\\Users\\janbu\\GitHub\\JWS_Decoder\\icons\\icon_ai.ico",
+    icon=['icon_ai.ico'],
 )
