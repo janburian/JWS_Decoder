@@ -129,7 +129,7 @@ def open_search_dialog():
 # Create the main window
 root = Tk()
 root.title("JWS File Decoder")
-root.iconbitmap(".//icons//icon_ai.ico")
+root.iconbitmap("C:\\Users\\janbu\\GitHub\\JWS_Decoder\\icons\\icon_ai.ico") # Need to use absolute path, otherwise it does not work
 # root.geometry("1000x500")
 
 window_width = 1000
