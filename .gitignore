@@ -5,8 +5,6 @@
 *.xml
 *.json
 license_data.json
-GUI_app.spec
-main.spec
 graphics/mitsubishi.png
 build/GUI_app/Analysis-00.toc
 build/GUI_app/base_library.zip
