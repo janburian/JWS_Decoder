@@ -4,7 +4,6 @@ import jwt
 from pathlib import Path
 from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage
 
-
 def get_filenames_list(licenses_path):
     filenames_list = []
     print("FILENAMES FOUND: ")
@@ -53,35 +52,58 @@ def ask_save_output(decoded_outputs_list):
     if response:
         file_path = 'license_data.json'
         if os.path.exists(file_path):
-            overwrite_response = messagebox.askyesnocancel("Save Output", f"'{file_path}' already exists. Do you want to overwrite it? If you do not want to overwrite it, please create a new .json file in next step.")
+            overwrite_response = messagebox.askyesnocancel("Save Output", f"'{file_path}' already exists. Do you want to overwrite it?", parent=root)
             if overwrite_response is None:
                 return  # User cancelled
             elif overwrite_response:
                 save_output_to_json(decoded_outputs_list, file_path)
-                messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
+                messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'", parent=root)
             else:
-                file_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
+                file_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")], parent=root)
                 if file_path:
                     save_output_to_json(decoded_outputs_list, file_path)
-                    messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
+                    messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'", parent=root)
         else:
             save_output_to_json(decoded_outputs_list, file_path)
-            messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'")
+            messagebox.showinfo("Success", f"Decoded JSON list has been successfully saved to '{file_path}'", parent=root)
 
 
 def select_files():
     text_widget.delete("1.0", END)  # Clear the text widget
-    licenses_path = filedialog.askdirectory(title="Select Directory Containing JWS Files")
+    licenses_path = filedialog.askdirectory(title="Select Directory Containing JWS Files", parent=root)
     if licenses_path:
         path_var.set(licenses_path)
         full_filenames_list = get_filenames_list(Path(licenses_path))
         get_output_information(full_filenames_list, text_widget)
 
 
+def select_single_file():
+    text_widget.delete("1.0", END)  # Clear the text widget
+    file_path = filedialog.askopenfilename(filetypes=[("JWS files", "*.jws")], parent=root)
+    if file_path:
+        path_var.set(file_path)
+        get_output_information([Path(file_path)], text_widget)
+
+
+def select_multiple_files():
+    text_widget.delete("1.0", END)  # Clear the text widget
+    files = filedialog.askopenfilenames(filetypes=[("JWS files", "*.jws")], parent=root)
+    if files:
+        path_var.set("; ".join(files))
+        get_output_information(list(map(Path, files)), text_widget)
+
+
 def open_search_dialog():
     search_window = Toplevel(root)
     search_window.title("Search")
     search_window.geometry("300x50")
+
+    window_x = root.winfo_x()
+    window_y = root.winfo_y()
+    window_width = root.winfo_width()
+    window_height = root.winfo_height()
+    search_window.geometry("+%d+%d" % (window_x + window_width//2 - 150, window_y + window_height//2 - 25))
+
     Label(search_window, text="Find:").pack(side=LEFT, padx=10)
     search_entry = Entry(search_window, width=20)
     search_entry.pack(side=LEFT, padx=10)
@@ -107,7 +129,18 @@ def open_search_dialog():
 # Create the main window
 root = Tk()
 root.title("JWS File Decoder")
-root.geometry("1000x500")
+# root.geometry("1000x500")
+
+window_width = 1000
+window_height = 600
+
+# Position the main window in the center of the screen
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+position_x = int(screen_width/2 - window_width/2)
+position_y = int(screen_height/2 - window_height/2)
+root.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
 
 # Bind Ctrl+F to open the search dialog
 root.bind('<Control-f>', lambda event: open_search_dialog())
@@ -116,7 +149,11 @@ root.bind('<Control-f>', lambda event: open_search_dialog())
 Label(root, text="Tool for decoding license files in .jws format", font=("Helvetica", 16, "bold")).pack(pady=5)
 path_var = StringVar()
 Label(root, textvariable=path_var).pack(pady=5)
-Button(root, text="Browse...", command=select_files).pack(pady=(10, 5))
+frame_buttons = Frame(root)
+frame_buttons.pack(pady=(10, 5))
+Button(frame_buttons, text="Browse Directory...", command=select_files).pack(side=LEFT, padx=5)
+Button(frame_buttons, text="Select Single File...", command=select_single_file).pack(side=LEFT, padx=5)
+Button(frame_buttons, text="Select Multiple Files...", command=select_multiple_files).pack(side=LEFT, padx=5)
 
 # Add image to the main window
 # Note: Replace 'your_image.png' with the path to the image you saved
