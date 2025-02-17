@@ -2,7 +2,7 @@ import json
 import os
 import jwt
 from pathlib import Path
-from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage
+from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage, DISABLED, NORMAL
 import sys
 
 def get_filenames_list(licenses_path):
@@ -36,7 +36,6 @@ def get_output_information(filenames_list, text_widget):
             text_widget.insert(END, f"{filename}\n{decoded_json_str}\n\n")
             text_widget.see(END)
             idx += 1
-    #text_widget.configure(state=DISABLED)
     ask_save_output(decoded_outputs_list)
 
 
@@ -71,29 +70,37 @@ def ask_save_output(decoded_outputs_list):
 
 
 def select_files():
+    text_widget.configure(state=NORMAL)
     text_widget.delete("1.0", END)  # Clear the text widget
     licenses_path = filedialog.askdirectory(title="Select Directory Containing JWS Files", parent=root)
     if licenses_path:
         path_var.set(licenses_path)
         full_filenames_list = get_filenames_list(Path(licenses_path))
         get_output_information(full_filenames_list, text_widget)
+        make_text_widget_disabled()
 
 
 def select_single_file():
+    text_widget.configure(state=NORMAL)
     text_widget.delete("1.0", END)  # Clear the text widget
     file_path = filedialog.askopenfilename(filetypes=[("JWS files", "*.jws")], parent=root)
     if file_path:
         path_var.set(file_path)
         get_output_information([Path(file_path)], text_widget)
+        make_text_widget_disabled()
 
 
 def select_multiple_files():
+    text_widget.configure(state=NORMAL)
     text_widget.delete("1.0", END)  # Clear the text widget
     files = filedialog.askopenfilenames(filetypes=[("JWS files", "*.jws")], parent=root)
     if files:
         path_var.set("; ".join(files))
         get_output_information(list(map(Path, files)), text_widget)
+        make_text_widget_disabled()
 
+def make_text_widget_disabled():
+    text_widget.configure(state=DISABLED)
 
 def open_search_dialog():
     search_window = Toplevel(root)
@@ -158,12 +165,13 @@ root.bind('<Control-f>', lambda event: open_search_dialog())
 # GUI Widgets
 Label(root, text="Tool for decoding license files in .jws format", font=("Helvetica", 16, "bold")).pack(pady=5)
 path_var = StringVar()
-Label(root, textvariable=path_var).pack(pady=5)
+#Label(root, textvariable=path_var).pack(pady=5)
 frame_buttons = Frame(root)
 frame_buttons.pack(pady=(10, 5))
 Button(frame_buttons, text="Browse Directory...", command=select_files).pack(side=LEFT, padx=5)
 Button(frame_buttons, text="Select Single File...", command=select_single_file).pack(side=LEFT, padx=5)
 Button(frame_buttons, text="Select Multiple Files...", command=select_multiple_files).pack(side=LEFT, padx=5)
+
 
 # Add image to the main window
 # Note: Replace 'your_image.png' with the path to the image you saved
@@ -179,6 +187,7 @@ text_frame.pack(pady=5, expand=True, fill=BOTH)
 # Text widget to display decoded JSON
 text_widget = Text(text_frame, wrap='word')
 text_widget.pack(side=LEFT, expand=True, fill=BOTH)
+
 
 # Scrollbar for the Text widget
 scrollbar = Scrollbar(text_frame, command=text_widget.yview, width=20)
