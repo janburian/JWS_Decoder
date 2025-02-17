@@ -2,7 +2,7 @@ import json
 import os
 import jwt
 from pathlib import Path
-from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage, DISABLED
+from tkinter import Tk, Label, Button, filedialog, messagebox, StringVar, Text, Scrollbar, END, RIGHT, Y, BOTH, Frame, LEFT, Toplevel, Entry, PhotoImage
 import sys
 
 def get_filenames_list(licenses_path):
@@ -36,7 +36,7 @@ def get_output_information(filenames_list, text_widget):
             text_widget.insert(END, f"{filename}\n{decoded_json_str}\n\n")
             text_widget.see(END)
             idx += 1
-    text_widget.configure(state=DISABLED)
+    #text_widget.configure(state=DISABLED)
     ask_save_output(decoded_outputs_list)
 
 
