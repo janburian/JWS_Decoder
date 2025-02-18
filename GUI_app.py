@@ -77,6 +77,7 @@ def select_files():
         path_var.set(licenses_path)
         full_filenames_list = get_filenames_list(Path(licenses_path))
         get_output_information(full_filenames_list, text_widget)
+        text_widget.yview_moveto(0)  # Set scrollbar position to the top
         make_text_widget_disabled()
 
 
@@ -87,6 +88,7 @@ def select_single_file():
     if file_path:
         path_var.set(file_path)
         get_output_information([Path(file_path)], text_widget)
+        text_widget.yview_moveto(0)  # Set scrollbar position to the top
         make_text_widget_disabled()
 
 
@@ -97,6 +99,7 @@ def select_multiple_files():
     if files:
         path_var.set("; ".join(files))
         get_output_information(list(map(Path, files)), text_widget)
+        text_widget.yview_moveto(0)  # Set scrollbar position to the top
         make_text_widget_disabled()
 
 def make_text_widget_disabled():
@@ -158,6 +161,7 @@ screen_height = root.winfo_screenheight()
 position_x = int(screen_width/2 - window_width/2)
 position_y = int(screen_height/2 - window_height/2)
 root.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
+root.minsize(700, 400)
 
 # Bind Ctrl+F to open the search dialog
 root.bind('<Control-f>', lambda event: open_search_dialog())
@@ -192,6 +196,7 @@ text_widget.pack(side=LEFT, expand=True, fill=BOTH)
 # Scrollbar for the Text widget
 scrollbar = Scrollbar(text_frame, command=text_widget.yview, width=20)
 scrollbar.pack(side=RIGHT, fill=Y)
+
 text_widget.configure(yscrollcommand=scrollbar.set)
 
 
