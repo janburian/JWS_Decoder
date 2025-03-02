@@ -233,7 +233,7 @@ scrollbar.pack(side=RIGHT, fill=Y)
 
 text_widget_license_info.configure(yscrollcommand=scrollbar.set)
 
-Label(root, text="License(s) assignment:", font=("Helvetica", 12, "bold")).pack(pady=5, anchor='w')
+Label(root, text="License file(s) assignment:", font=("Helvetica", 12, "bold")).pack(pady=5, anchor='w')
 text_frame_assignment = Frame(root)
 text_frame_assignment.pack(pady=5, expand=True, fill=BOTH)
 
