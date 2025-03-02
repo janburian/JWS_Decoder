@@ -97,7 +97,7 @@ def select_files():
         path_var.set(licenses_path)
         full_filenames_list = get_filenames_list(Path(licenses_path))
         get_output_information(full_filenames_list, text_widget_license_info, text_widget_license_assignment)
-        text_widget_license_info.yview_moveto(0)  # Set scrollbar position to the top
+        set_text_widgets_scrollbars_default()
         make_text_widgets_disabled()
 
 
@@ -107,7 +107,7 @@ def select_single_file():
     if file_path:
         path_var.set(file_path)
         get_output_information([Path(file_path)], text_widget_license_info, text_widget_license_assignment)
-        text_widget_license_info.yview_moveto(0)  # Set scrollbar position to the top
+        set_text_widgets_scrollbars_default()
         make_text_widgets_disabled()
 
 
@@ -117,7 +117,7 @@ def select_multiple_files():
     if files:
         path_var.set("; ".join(files))
         get_output_information(list(map(Path, files)), text_widget_license_info, text_widget_license_assignment)
-        text_widget_license_info.yview_moveto(0)  # Set scrollbar position to the top
+        set_text_widgets_scrollbars_default()
         make_text_widgets_disabled()
 
 
@@ -132,6 +132,12 @@ def make_text_widgets_cleared_enabled():
 
     text_widget_license_assignment.configure(state=NORMAL)
     text_widget_license_assignment.delete("1.0", END)
+
+
+def set_text_widgets_scrollbars_default():
+    # Set scrollbars position to the top
+    text_widget_license_info.yview_moveto(0)
+    text_widget_license_assignment.yview_moveto(0)
 
 
 def open_search_dialog():
